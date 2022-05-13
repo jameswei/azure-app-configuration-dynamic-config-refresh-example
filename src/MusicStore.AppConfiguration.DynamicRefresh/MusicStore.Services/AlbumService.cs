@@ -6,6 +6,7 @@ using MusicStore.Shared.FeatureManagement;
 using MusicStore.Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MusicStore.Services
@@ -36,10 +37,7 @@ namespace MusicStore.Services
 
             if (await _featureManager.IsEnabledAsync(Features.PromotionDiscounts))
             {
-                foreach (var album in promotionalAlbums)
-                {
-                    album.PromoPrice = Math.Round((album.Price - (album.Price * discount)), 2);
-                }
+                promotionalAlbums.ForEach(album => album.PromoPrice = Math.Round(album.Price - (album.Price * discount), 2));
             }
 
             return promotionalAlbums;

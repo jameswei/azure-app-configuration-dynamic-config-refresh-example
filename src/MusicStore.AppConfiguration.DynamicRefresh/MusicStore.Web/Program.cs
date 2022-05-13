@@ -15,10 +15,10 @@ namespace MusicStore.Web
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            // initialize an IHostBuilder class for a web application, including
+            // root directory, host environment, and appsettings.
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
-                })
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
                 .ConfigureAppConfiguration((context, config) => {
                     var settings = config.Build();
                     var appConfigEndpoint = settings["AppSettings:AppConfiguration:Endpoint"];
@@ -34,10 +34,14 @@ namespace MusicStore.Web
                                 .Connect(endpoint, new ManagedIdentityCredential(clientId: userAssignedIdentityClientId))
                                 .ConfigureRefresh(refreshOpt =>
                                 {
+                                    // register a given key and check *all* keys with a specific interval
                                     refreshOpt.Register(key: "AppSettings:Version", refreshAll: true, label: LabelFilter.Null);
                                     refreshOpt.SetCacheExpiration(TimeSpan.FromSeconds(10));
                                 })
+                                // enable feature flags
                                 .UseFeatureFlags();
+                            // override the default expiration policy
+                            // .UseFeatureFlags(featureFlagOptions => featureFlagOptions.CacheExpirationTime = TimeSpan.FromMinutes(1));
                         });
                     }
 

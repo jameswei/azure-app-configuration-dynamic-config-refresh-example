@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MusicStore.Data;
 using MusicStore.Services;
 using Microsoft.FeatureManagement;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MusicStore.Web.FeatureManagement;
 using MusicStore.Shared;
+using Microsoft.Extensions.Hosting;
 
 namespace MusicStore.Web
 {
@@ -23,7 +23,7 @@ namespace MusicStore.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to register services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             // Configure AppSettings
@@ -42,16 +42,22 @@ namespace MusicStore.Web
                 .UseDisabledFeaturesHandler(new MusicStoreDisabledFeaturesHandler());
 
             services.AddControllersWithViews();
+            // register controllers for rest api.
+            // services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseAzureAppConfiguration();
 
-            app.UseDeveloperExceptionPage();
-
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            // HSTS Http Restrict Transportation Secure Protocol, which is a response header to prevent browser sending any request over HTTP.
             app.UseHsts();
 
             app.UseHttpsRedirection();

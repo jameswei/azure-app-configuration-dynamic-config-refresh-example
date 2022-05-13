@@ -5,11 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- introduce Microsoft.FeatureManagement package to enable Feature Manager -->
     <PackageReference Include="Microsoft.FeatureManagement" Version="2.0.0-preview-010610001-1263" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MusicStore.Data\MusicStore.Data.csproj" />
+     <ProjectReference Include="..\MusicStore.Data\MusicStore.Data.csproj" />
     <ProjectReference Include="..\MusicStore.Shared\MusicStore.Shared.csproj" />
   </ItemGroup>
 
