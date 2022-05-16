@@ -34,9 +34,10 @@ namespace MusicStore.Web
                                 .Connect(endpoint, new ManagedIdentityCredential(clientId: userAssignedIdentityClientId))
                                 .ConfigureRefresh(refreshOpt =>
                                 {
-                                    // register a given key and check *all* keys with a specific interval
-                                    refreshOpt.Register(key: "AppSettings:Version", refreshAll: true, label: LabelFilter.Null);
-                                    refreshOpt.SetCacheExpiration(TimeSpan.FromSeconds(10));
+                                    // register a sentinel key and check *all* keys with a specific interval
+                                    // will reload all configurations if registered key is modified.
+                                    refreshOpt.Register(key: "AppSettings:Version", refreshAll: true, label: LabelFilter.Null)
+                                    .SetCacheExpiration(TimeSpan.FromMinutes(10));
                                 })
                                 // enable feature flags
                                 .UseFeatureFlags();

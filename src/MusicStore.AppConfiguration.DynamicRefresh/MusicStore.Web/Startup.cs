@@ -26,7 +26,7 @@ namespace MusicStore.Web
         // This method gets called by the runtime. Use this method to register services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configure AppSettings
+            // Bind configuration data to POCO class
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // Configure custom injections
@@ -42,6 +42,8 @@ namespace MusicStore.Web
                 .UseDisabledFeaturesHandler(new MusicStoreDisabledFeaturesHandler());
 
             services.AddControllersWithViews();
+            // add App Configuration components to the service collection.
+            services.AddAzureAppConfiguration();
             // register controllers for rest api.
             // services.AddControllers();
         }
